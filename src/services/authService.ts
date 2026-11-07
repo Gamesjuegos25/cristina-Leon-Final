@@ -9,10 +9,12 @@ export const authService = {
   // TODO 1.1 (Autenticación): POST /auth/login con { username, password, expiresInMins: 1 }.
   // Devuelve los datos del usuario y los tokens (LoginResponse).
   login: async (username: string, password: string): Promise<LoginResponse> => {
-    void plain
-    void username
-    void password
-    throw new Error('login no implementado')
+    const res = await plain.post<LoginResponse>('/auth/login', {
+      username,
+      password,
+      expiresInMins: 1,
+    })
+    return res.data
   },
 
   // TODO 1.3 (Autenticación): POST /auth/refresh con { refreshToken, expiresInMins: 1 }.
