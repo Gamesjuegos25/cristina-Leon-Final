@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import ProductsPage from './pages/ProductsPage'
 import ProductDetailPage from './pages/ProductDetailPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 // TODO 1.4 (Autenticación): las rutas /productos y /productos/:id deben quedar dentro de
 // <Route element={<ProtectedRoute />}>.
@@ -12,7 +13,8 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/productos" element={<ProductsPage />} />
       <Route path="/productos/:id" element={<ProductDetailPage />} />
-      <Route path="/" element={<Navigate to="/productos" replace />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }
