@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { AuthUser, LoginResponse } from '../types'
 
+//TODO 1.2 LISTO 
 interface AuthState {
   user: AuthUser | null
   accessToken: string | null
