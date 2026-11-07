@@ -20,7 +20,10 @@ export const authService = {
   // TODO 1.3 (Autenticación): POST /auth/refresh con { refreshToken, expiresInMins: 1 }.
   // Devuelve el nuevo accessToken y refreshToken.
   refresh: async (refreshToken: string): Promise<{ accessToken: string; refreshToken: string }> => {
-    void refreshToken
-    throw new Error('refresh no implementado')
+    const res = await plain.post<{ accessToken: string; refreshToken: string }>('/auth/refresh', {
+      refreshToken,
+      expiresInMins: 1,
+    })
+    return res.data
   },
 }
