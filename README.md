@@ -3,7 +3,7 @@
 Aplicación web para consultar, buscar, crear y eliminar productos. Consume la API pública de
 [DummyJSON](https://dummyjson.com) e incluye inicio de sesión con renovación automática de tokens.
 
-**Sitio desplegado:** [PEGAR_AQUI_LA_URL_DE_RENDER](https://PEGAR_AQUI_LA_URL_DE_RENDER)
+**Sitio desplegado:** [https://cristina-leon-final.onrender.com](https://cristina-leon-final.onrender.com)
 
 ## Funcionalidades
 
@@ -69,4 +69,4 @@ El sitio está publicado como **Static Site** en Render:
 
 ## Autor
 
-PEGAR_AQUI_TU_NOMBRE
+María Cristina Maldonado León
