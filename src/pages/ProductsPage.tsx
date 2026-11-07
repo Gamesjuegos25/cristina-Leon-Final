@@ -15,8 +15,8 @@ import { getErrorMessage } from '../utils/errorHandler'
 //  - Al buscar (botón Buscar o Enter) escriba q en la URL y vuelva a la página 1; al paginar cambie solo page.
 //  - Al recargar la página o compartir el enlace debe verse la misma lista.
 function parsePage(raw: string | null): number {
-  void raw
-  return 1
+  const n = Number(raw)
+  return Number.isInteger(n) && n >= 1 ? n : 1
 }
 
 function ProductsPage() {
@@ -32,24 +32,27 @@ function ProductsPage() {
   // TODO 2.2: useProducts({ page, q }) ya devuelve los datos cuando complete el hook.
   const { data, isLoading, isError, error, refetch, isFetching } = useProducts({ page, q })
   const remove = useDeleteProduct()
-  void refetch
   void isFetching
 
   const search = (event: React.FormEvent) => {
     event.preventDefault()
-    void setSearchParams
     // TODO 2.3: actualice la URL con q=text y sin page.
+    const term = text.trim()
+    setSearchParams(term ? { q: term } : {})
   }
 
   const changePage = (n: number) => {
-    void n
     // TODO 2.3: actualice la URL con page=n conservando q.
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      next.set('page', String(n))
+      return next
+    })
   }
 
   const onDelete = (item: { id: number; title: string }) => {
     // TODO 4.4 (Eliminar): pida confirmación con window.confirm y, si acepta, llame a remove.mutate(item.id).
-    void item
-    void remove
+    if (window.confirm(`¿Eliminar "${item.title}"?`)) remove.mutate(item.id)
   }
 
     const salir = () => {
@@ -85,8 +88,9 @@ function ProductsPage() {
 
         {/* TODO 5.2 (Errores): card de error con el mensaje (getErrorMessage) y un botón Reintentar que llame a refetch. */}
         {isError && (
-          <Alert variant="destructive" className="mt-6">
+          <Alert variant="destructive" className="mt-6 flex flex-col gap-3">
             <AlertDescription>{getErrorMessage(error)}</AlertDescription>
+            <Button variant="outline" size="sm" className="self-start" onClick={() => refetch()}>Reintentar</Button>
           </Alert>
         )}
 
@@ -98,7 +102,7 @@ function ProductsPage() {
           <>
             <p className="mt-4 text-sm text-slate-500">{data.total} resultados</p>
             {/* TODO 6.1 (Interfaz): la cuadrícula debe tener 1 columna en móvil, 2 en tableta (sm) y 4 en escritorio (lg). */}
-            <div className="mt-2 grid gap-4">
+            <div className="mt-2 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {data.products.map((item) => (
                 <ProductCard key={item.id} item={item} onDelete={onDelete} />
               ))}

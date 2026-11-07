@@ -1,8 +1,11 @@
+import axios from 'axios'
+import toast from 'react-hot-toast'
 import { Link, useParams } from 'react-router-dom'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { useProduct } from '../hooks/useProducts'
 import { getErrorMessage } from '../utils/errorHandler'
+import { fichaText } from '../utils/ficha'
 import type { Product } from '../types'
 
 // TODO 3.2 (Detalle y descarga): descargue la imagen del producto como archivo producto-{id}.<extensión>.
@@ -11,15 +14,33 @@ import type { Product } from '../types'
 //    URL.revokeObjectURL al terminar.
 //  - La extensión sale del tipo del Blob (por ejemplo image/webp).
 //  - Si falla, muestre toast.error con getErrorMessage.
+// Descarga un Blob como archivo: crea la URL temporal, hace clic en un <a download> y la libera.
+function saveBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 async function downloadImage(item: Product) {
-  void item
+  try {
+    // Imagen externa: se pide con axios directo (no con 'api') para no enviar el token a otro servidor.
+    const res = await axios.get<Blob>(item.thumbnail, { responseType: 'blob' })
+    const ext = res.data.type.split('/')[1] || 'jpg'
+    saveBlob(res.data, `producto-${item.id}.${ext}`)
+  } catch (err) {
+    toast.error(getErrorMessage(err))
+  }
 }
 
 // TODO 3.3 (Detalle y descarga): descargue la ficha de texto. Importe fichaText de ../utils/ficha: esa función
 // ya arma el texto. Cree un Blob de tipo text/plain con ese texto y descárguelo como producto-{id}.txt con
 // URL.createObjectURL y un <a download>; libere la URL con URL.revokeObjectURL al terminar.
 function downloadFicha(item: Product) {
-  void item
+  const blob = new Blob([fichaText(item)], { type: 'text/plain' })
+  saveBlob(blob, `producto-${item.id}.txt`)
 }
 
 function ProductDetailPage() {
